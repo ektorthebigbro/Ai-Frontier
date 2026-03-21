@@ -1,0 +1,83 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+build_*/
+*.egg
+*.whl
+
+# Virtual environment
+.venv/
+venv/
+env/
+
+# Data and model artifacts
+data/cache/**
+data/processed/**
+checkpoints/**
+artifacts/**
+!checkpoints/.gitkeep
+!data/cache/.gitkeep
+!data/processed/.gitkeep
+!artifacts/.gitkeep
+
+# Logs
+logs/**
+!logs/.gitkeep
+
+# Runtime output
+debug_log.txt
+runtime_stdout.log
+runtime_stderr.log
+*.stackdump
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+._*
+
+# CMake build directories
+dashboard/build*/
+dashboard_qt_cpp/build*/
+dashboard_qt_cpp_v2/build*/
+
+# Compiled binaries
+*.exe
+*.dll
+*.dylib
+*.so
+*.obj
+*.o
+*.a
+*.lib
+
+# Temp
+.tmp/
+*.tmp
+configs/*.bak
+
+# Secrets
+.env
+.env.*
+credentials.json
+*.pem
+*.key
+
+# TensorBoard
+runs/
+
+# Claude
+.claude/
+
+# Local notes
+SESSION_CONTEXT.md

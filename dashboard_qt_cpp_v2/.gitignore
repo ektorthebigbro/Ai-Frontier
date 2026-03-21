@@ -1,0 +1,6 @@
+build/
+build_*/
+*.stackdump
+debug_log.txt
+runtime_stdout.log
+runtime_stderr.log
