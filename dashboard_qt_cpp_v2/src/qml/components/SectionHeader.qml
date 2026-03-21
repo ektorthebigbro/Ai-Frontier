@@ -16,9 +16,9 @@ ColumnLayout {
         Layout.fillWidth: true
 
         Rectangle {
-            width: 3
-            height: 26
-            radius: 1.5
+            width: 24
+            height: 2
+            radius: 0
             color: root.accentColor
             Layout.alignment: Qt.AlignTop
         }

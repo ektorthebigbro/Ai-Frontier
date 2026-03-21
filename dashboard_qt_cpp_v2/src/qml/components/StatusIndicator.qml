@@ -12,8 +12,8 @@ Item {
     Rectangle {
         id: badge
         width: row.width + 26
-        height: 28
-        radius: 8
+        height: 26
+        radius: 0
         color: indicator.connected
             ? AppTheme.alpha(AppTheme.successStrong, 0.10)
             : AppTheme.alpha(AppTheme.dangerStrong, 0.10)
@@ -43,9 +43,9 @@ Item {
 
             Rectangle {
                 id: statusDot
-                width: 7
-                height: 7
-                radius: 2
+                width: 6
+                height: 6
+                radius: 0
                 color: indicator.connected ? AppTheme.success : AppTheme.danger
                 anchors.verticalCenter: parent.verticalCenter
                 scale: 1.0

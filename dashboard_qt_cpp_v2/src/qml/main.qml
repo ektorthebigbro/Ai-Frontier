@@ -98,8 +98,8 @@ ApplicationWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.margins: 20
-        height: 64
-        radius: 18
+        height: 62
+        radius: 12
         clip: true
         z: 20
 
@@ -133,9 +133,9 @@ ApplicationWindow {
                 Rectangle {
                     width: 38
                     height: 38
-                    radius: 12
-                    color: Qt.rgba(1, 1, 1, 0.08)
-                    border.color: Qt.rgba(1, 1, 1, 0.18)
+                    radius: 8
+                    color: Qt.rgba(1, 1, 1, 0.05)
+                    border.color: Qt.rgba(1, 1, 1, 0.14)
                     border.width: 1
 
                     Text {
@@ -188,12 +188,12 @@ ApplicationWindow {
                         required property var modelData
                         width: 38
                         height: 36
-                        radius: 10
+                        radius: 8
                         color: controlArea.containsMouse
-                            ? (modelData.danger ? Qt.rgba(0.94, 0.44, 0.42, 0.18) : Qt.rgba(1, 1, 1, 0.07))
+                            ? (modelData.danger ? Qt.rgba(0.94, 0.44, 0.42, 0.14) : Qt.rgba(1, 1, 1, 0.05))
                             : "transparent"
                         border.color: controlArea.containsMouse
-                            ? (modelData.danger ? Qt.rgba(0.94, 0.44, 0.42, 0.28) : Qt.rgba(1, 1, 1, 0.10))
+                            ? (modelData.danger ? Qt.rgba(0.94, 0.44, 0.42, 0.22) : Qt.rgba(1, 1, 1, 0.08))
                             : "transparent"
                         border.width: 1
 
@@ -256,13 +256,13 @@ ApplicationWindow {
             id: pageShell
             width: parent.width - sidebar.width - parent.spacing
             height: parent.height
-            radius: 24
+            radius: 14
             clip: true
 
             Item {
                 id: pageViewport
                 anchors.fill: parent
-                anchors.margins: 22
+                anchors.margins: 18
                 clip: true
                 opacity: 1.0
 
@@ -322,7 +322,7 @@ ApplicationWindow {
         anchors.bottom: parent.bottom
         anchors.margins: 20
         height: 46
-        radius: 14
+        radius: 10
         clip: true
         z: 20
 

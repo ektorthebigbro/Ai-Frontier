@@ -247,9 +247,9 @@ ScrollView {
                         RowLayout {
                             width: parent.width
                             Text { text: "Issues requiring attention"; color: AppTheme.textMuted; font.pixelSize: 11; Layout.fillWidth: true }
-                            PillBadge {
+                            FlatTag {
                                 text: issues.length ? String(issues.length) + " issues" : "clear"
-                                badgeColor: issues.length ? AppTheme.danger : AppTheme.success
+                                tagColor: issues.length ? AppTheme.danger : AppTheme.success
                             }
                         }
 

@@ -7,8 +7,8 @@ import AiFrontier.Backend
 GlassPanel {
     id: sidebar
 
-    width: collapsed ? 88 : 272
-    radius: 22
+    width: collapsed ? 82 : 264
+    radius: 14
     clip: true
 
     required property int currentPage
@@ -74,14 +74,14 @@ GlassPanel {
 
         Column {
             width: sidebar.width - 28
-            spacing: 14
+            spacing: 12
 
             Rectangle {
                 width: parent.width
-                height: sidebar.collapsed ? 132 : 148
-                radius: 18
-                color: AppTheme.alpha(AppTheme.panelAlt, 0.58)
-                border.color: AppTheme.alpha(AppTheme.accentGlass, 0.10)
+                height: sidebar.collapsed ? 118 : 136
+                radius: 12
+                color: AppTheme.alpha(AppTheme.panelAlt, 0.44)
+                border.color: AppTheme.alpha(AppTheme.accentGlass, 0.08)
                 border.width: 1
 
                 Column {
@@ -97,9 +97,9 @@ GlassPanel {
                         Rectangle {
                             width: 54
                             height: 54
-                            radius: 16
-                            color: Qt.rgba(1, 1, 1, 0.08)
-                            border.color: Qt.rgba(1, 1, 1, 0.16)
+                            radius: 10
+                            color: Qt.rgba(1, 1, 1, 0.05)
+                            border.color: Qt.rgba(1, 1, 1, 0.12)
                             border.width: 1
 
                             Text {
@@ -155,9 +155,9 @@ GlassPanel {
                         Rectangle {
                             width: 36
                             height: 36
-                            radius: 12
-                            color: collapseHover.containsMouse ? Qt.rgba(1, 1, 1, 0.06) : "transparent"
-                            border.color: Qt.rgba(1, 1, 1, collapseHover.containsMouse ? 0.14 : 0.07)
+                            radius: 8
+                            color: collapseHover.containsMouse ? Qt.rgba(1, 1, 1, 0.04) : "transparent"
+                            border.color: Qt.rgba(1, 1, 1, collapseHover.containsMouse ? 0.10 : 0.06)
                             border.width: 1
 
                             Text {
@@ -178,16 +178,16 @@ GlassPanel {
 
                     Rectangle {
                         width: parent.width
-                        height: 48
-                        radius: 15
-                        color: Qt.rgba(1, 1, 1, 0.035)
-                        border.color: Qt.rgba(1, 1, 1, 0.08)
+                        height: 40
+                        radius: 0
+                        color: Qt.rgba(1, 1, 1, 0.025)
+                        border.color: Qt.rgba(1, 1, 1, 0.07)
                         border.width: 1
 
                         Row {
                             anchors.fill: parent
-                            anchors.margins: 4
-                            spacing: 4
+                            anchors.margins: 3
+                            spacing: 3
 
                             Repeater {
                                 model: [
@@ -199,12 +199,12 @@ GlassPanel {
                                     required property var modelData
                                     width: (parent.width - 4) / 2
                                     height: parent.height
-                                    radius: 12
+                                    radius: 0
                                     color: sidebar.advancedMode === modelData.advanced
-                                        ? AppTheme.alpha(AppTheme.accentPrimary, 0.16)
+                                        ? AppTheme.alpha(AppTheme.accentPrimary, 0.11)
                                         : "transparent"
                                     border.color: sidebar.advancedMode === modelData.advanced
-                                        ? AppTheme.alpha(AppTheme.accentPrimary, 0.24)
+                                        ? AppTheme.alpha(AppTheme.accentPrimary, 0.16)
                                         : "transparent"
                                     border.width: 1
 
@@ -212,7 +212,7 @@ GlassPanel {
                                         anchors.centerIn: parent
                                         text: parent.modelData.label
                                         color: sidebar.advancedMode === parent.modelData.advanced ? AppTheme.textPrimary : AppTheme.textSecondary
-                                        font.pixelSize: 12
+                                        font.pixelSize: 11
                                         font.weight: Font.DemiBold
                                     }
 
@@ -236,9 +236,9 @@ GlassPanel {
                     Rectangle {
                         width: 50
                         height: 50
-                        radius: 15
-                        color: Qt.rgba(1, 1, 1, 0.08)
-                        border.color: Qt.rgba(1, 1, 1, 0.16)
+                        radius: 10
+                        color: Qt.rgba(1, 1, 1, 0.05)
+                        border.color: Qt.rgba(1, 1, 1, 0.12)
                         border.width: 1
 
                         Text {
@@ -264,9 +264,9 @@ GlassPanel {
                     Rectangle {
                         width: 38
                         height: 36
-                        radius: 12
-                        color: expandHover.containsMouse ? Qt.rgba(1, 1, 1, 0.06) : "transparent"
-                        border.color: Qt.rgba(1, 1, 1, expandHover.containsMouse ? 0.14 : 0.07)
+                        radius: 8
+                        color: expandHover.containsMouse ? Qt.rgba(1, 1, 1, 0.04) : "transparent"
+                        border.color: Qt.rgba(1, 1, 1, expandHover.containsMouse ? 0.10 : 0.06)
                         border.width: 1
                         anchors.horizontalCenter: parent.horizontalCenter
 
@@ -393,7 +393,7 @@ GlassPanel {
                         required property var modelData
                         width: parent.width
                         height: 48
-                        radius: 15
+                        radius: 10
                         color: Qt.rgba(1, 1, 1, 0.03)
                         border.color: Qt.rgba(1, 1, 1, 0.08)
                         border.width: 1
@@ -420,10 +420,10 @@ GlassPanel {
                                 anchors.verticalCenter: parent.verticalCenter
                             }
 
-                            PillBadge {
+                            FlatTag {
                                 id: quickBadge
                                 text: parent.parent.modelData.value
-                                badgeColor: sidebar.quickBadgeColor(parent.parent.modelData.value)
+                                tagColor: sidebar.quickBadgeColor(parent.parent.modelData.value)
                                 anchors.verticalCenter: parent.verticalCenter
                             }
                         }
@@ -447,7 +447,7 @@ GlassPanel {
 
                 Rectangle {
                     width: parent.width
-                    radius: 16
+                    radius: 10
                     color: Qt.rgba(1, 1, 1, 0.03)
                     border.color: Qt.rgba(1, 1, 1, 0.08)
                     border.width: 1

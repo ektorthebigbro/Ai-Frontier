@@ -1,17 +1,17 @@
 import QtQuick
 
 Rectangle {
-    id: badge
+    id: tag
 
     height: 20
-    radius: 6
+    radius: 0
 
     property string text: ""
-    property color badgeColor: AppTheme.accentSecondary
+    property color tagColor: AppTheme.accentSecondary
 
     width: Math.max(54, label.implicitWidth + 18)
-    color: AppTheme.alpha(badgeColor, 0.10)
-    border.color: AppTheme.alpha(badgeColor, 0.22)
+    color: AppTheme.alpha(tagColor, 0.10)
+    border.color: AppTheme.alpha(tagColor, 0.22)
     border.width: 1
 
     Behavior on width { NumberAnimation { duration: 160; easing.type: Easing.OutCubic } }
@@ -30,8 +30,8 @@ Rectangle {
     Text {
         id: label
         anchors.centerIn: parent
-        text: badge.text
-        color: badge.badgeColor
+        text: tag.text
+        color: tag.tagColor
         font.pixelSize: 10
         font.weight: 800
         font.letterSpacing: 0.55

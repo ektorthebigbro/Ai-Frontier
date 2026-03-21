@@ -15,7 +15,7 @@ Rectangle {
 
     width: Math.max(94, labelRow.implicitWidth + 28)
     height: 38
-    radius: 8
+    radius: 0
     color: {
         if (!enabled)
             return Qt.rgba(1, 1, 1, 0.03)

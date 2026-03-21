@@ -91,6 +91,114 @@ def venv_python() -> Path:
     return PROJECT_ROOT / ".venv" / "bin" / "python"
 
 
+# ---------------------------------------------------------------------------
+# Toolchain auto-discovery
+# Scans well-known locations on all drives for build tools so the user does
+# not have to set environment variables manually.
+# ---------------------------------------------------------------------------
+
+# Candidate roots to search for dependencies (ordered by preference).
+_DEP_ROOTS: list[Path] = [
+    Path("F:/Dependencies"),
+    Path("C:/Dependencies"),
+    Path("D:/Dependencies"),
+]
+
+# Qt: prefer a specific version when set via env; otherwise take the newest.
+_QT_ARCH_PREFERENCE = ["mingw_64", "msvc2022_64", "msvc2019_64", "gcc_64", "clang_64"]
+
+
+def _first_existing(*candidates: Path | str) -> Path | None:
+    for c in candidates:
+        p = Path(c)
+        if p.exists():
+            return p
+    return None
+
+
+def _dep_root() -> Path | None:
+    """Return the first existing Dependencies root."""
+    return _first_existing(*_DEP_ROOTS)
+
+
+def _find_qt_dir(dep: Path) -> Path | None:
+    """Locate the Qt installation directory (the versioned arch folder)."""
+    # Respect explicit env override first.
+    for var in ("QT_DIR", "QTDIR"):
+        val = os.environ.get(var, "").strip()
+        if val and Path(val).exists():
+            return Path(val)
+
+    qt_root = dep / "Qt"
+    if not qt_root.exists():
+        return None
+
+    # Find newest version folder.
+    version_dirs = sorted(
+        (d for d in qt_root.iterdir() if d.is_dir() and d.name[0].isdigit()),
+        reverse=True,
+    )
+    for ver_dir in version_dirs:
+        for arch in _QT_ARCH_PREFERENCE:
+            candidate = ver_dir / arch
+            if (candidate / "bin" / "qmake.exe").exists() or (candidate / "bin" / "qmake").exists():
+                return candidate
+    return None
+
+
+def _find_mingw_dir(dep: Path) -> Path | None:
+    """Locate the MinGW toolchain bundled with Qt."""
+    qt_tools = dep / "Qt" / "Tools"
+    if not qt_tools.exists():
+        return None
+    mingw_dirs = sorted(
+        (d for d in qt_tools.iterdir() if d.is_dir() and d.name.startswith("mingw")),
+        reverse=True,
+    )
+    if mingw_dirs:
+        return mingw_dirs[0] / "bin"
+    return None
+
+
+def _find_cmake_dir(dep: Path) -> Path | None:
+    """Locate cmake.exe."""
+    for candidate in [
+        dep / "cmake" / "bin",
+        dep / "CMake" / "bin",
+        Path("C:/Program Files/CMake/bin"),
+    ]:
+        if (candidate / "cmake.exe").exists() or (candidate / "cmake").exists():
+            return candidate
+    return None
+
+
+def _find_ninja(dep: Path) -> Path | None:
+    """Locate ninja.exe — check Qt's bundled copy and standalone installs."""
+    for candidate in [
+        dep / "Qt" / "Tools" / "Ninja",
+        dep / "ninja",
+        dep / "VS Tools" / "Common7" / "IDE" / "CommonExtensions" / "Microsoft" / "CMake" / "Ninja",
+    ]:
+        exe = candidate / ("ninja.exe" if on_windows() else "ninja")
+        if exe.exists():
+            return candidate
+    return None
+
+
+def resolve_toolchain() -> dict[str, str | None]:
+    """Return a dict of resolved tool paths (may be None if not found)."""
+    dep = _dep_root()
+    if dep is None:
+        return {}
+
+    return {
+        "qt_dir": str(_find_qt_dir(dep) or ""),
+        "mingw_bin": str(_find_mingw_dir(dep) or ""),
+        "cmake_bin": str(_find_cmake_dir(dep) or ""),
+        "ninja_bin": str(_find_ninja(dep) or ""),
+    }
+
+
 def runtime_env(temp_subdir: str) -> dict[str, str]:
     env = os.environ.copy()
     temp_dir = ensure_dir(TMP_DIR / temp_subdir)
@@ -105,12 +213,26 @@ def runtime_env(temp_subdir: str) -> dict[str, str]:
     env["TMP"] = str(temp_dir)
     env["TMPDIR"] = str(temp_dir)
 
-    qt_dir = env.get("QT_DIR") or env.get("QTDIR")
-    if qt_dir:
-        qt_bin = Path(qt_dir) / "bin"
+    # --- Auto-inject build tools into PATH ---
+    toolchain = resolve_toolchain()
+    path_prepend: list[str] = []
+
+    qt_dir_str = env.get("QT_DIR") or env.get("QTDIR") or toolchain.get("qt_dir", "")
+    if qt_dir_str:
+        qt_bin = Path(qt_dir_str) / "bin"
         if qt_bin.exists():
-            existing_path = env.get("PATH", "")
-            env["PATH"] = os.pathsep.join([str(qt_bin), existing_path]) if existing_path else str(qt_bin)
+            path_prepend.append(str(qt_bin))
+            env["QT_DIR"] = qt_dir_str
+
+    for key in ("mingw_bin", "cmake_bin", "ninja_bin"):
+        val = toolchain.get(key, "")
+        if val and Path(val).exists():
+            path_prepend.append(val)
+
+    existing_path = env.get("PATH", "")
+    if path_prepend:
+        env["PATH"] = os.pathsep.join(path_prepend + ([existing_path] if existing_path else []))
+
     return env
 
 
@@ -247,15 +369,39 @@ def pick_generator() -> list[str]:
     generator = os.environ.get("AI_FRONTIER_CMAKE_GENERATOR", "").strip() or os.environ.get("CMAKE_GENERATOR", "").strip()
     if generator:
         return ["-G", generator]
+    # Prefer Ninja — check PATH first, then auto-discovered location.
     if shutil.which("ninja"):
         return ["-G", "Ninja"]
+    dep = _dep_root()
+    if dep is not None:
+        ninja_dir = _find_ninja(dep)
+        if ninja_dir is not None:
+            ninja_exe = ninja_dir / ("ninja.exe" if on_windows() else "ninja")
+            if ninja_exe.exists():
+                return ["-G", "Ninja", f"-DCMAKE_MAKE_PROGRAM={ninja_exe}"]
     return []
 
 
 def cmake_prefix_args() -> list[str]:
     qt_dir = os.environ.get("QT_DIR", "").strip() or os.environ.get("QTDIR", "").strip()
+    if not qt_dir:
+        dep = _dep_root()
+        if dep is not None:
+            found = _find_qt_dir(dep)
+            if found:
+                qt_dir = str(found)
     if qt_dir:
-        return [f"-DCMAKE_PREFIX_PATH={qt_dir}"]
+        args = [f"-DCMAKE_PREFIX_PATH={qt_dir}"]
+        # Also tell CMake where MinGW is so it picks the right toolchain.
+        dep = _dep_root()
+        if dep is not None and on_windows():
+            mingw_bin = _find_mingw_dir(dep)
+            if mingw_bin and (mingw_bin / "g++.exe").exists():
+                args += [
+                    f"-DCMAKE_C_COMPILER={mingw_bin / 'gcc.exe'}",
+                    f"-DCMAKE_CXX_COMPILER={mingw_bin / 'g++.exe'}",
+                ]
+        return args
     return []
 
 

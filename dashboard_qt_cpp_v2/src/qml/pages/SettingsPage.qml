@@ -525,9 +525,9 @@ ScrollView {
                                 anchors.margins: 12
                                 spacing: 10
 
-                                PillBadge {
+                                FlatTag {
                                     text: page.saved ? "Saved" : "Pending"
-                                    badgeColor: page.saved ? AppTheme.success : AppTheme.accentPrimary
+                                    tagColor: page.saved ? AppTheme.success : AppTheme.accentPrimary
                                     anchors.verticalCenter: parent.verticalCenter
                                 }
 

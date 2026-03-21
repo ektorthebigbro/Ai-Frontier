@@ -15,9 +15,9 @@ ColumnLayout {
         spacing: 10
 
         Rectangle {
-            width: 10
-            height: 10
-            radius: 5
+            width: 28
+            height: 2
+            radius: 0
             color: AppTheme.accentPrimary
             opacity: 0.92
             Layout.alignment: Qt.AlignVCenter
@@ -36,7 +36,7 @@ ColumnLayout {
     Text {
         text: root.title
         color: AppTheme.textPrimary
-        font.pixelSize: 40
+        font.pixelSize: 38
         font.weight: 800
         font.letterSpacing: -1.0
         Layout.fillWidth: true

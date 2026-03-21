@@ -59,10 +59,10 @@ Rectangle {
                 height: 1
             }
 
-            PillBadge {
+            FlatTag {
                 id: severityBadge
                 text: root.severityText
-                badgeColor: root.severityColor
+                tagColor: root.severityColor
             }
 
             Text {

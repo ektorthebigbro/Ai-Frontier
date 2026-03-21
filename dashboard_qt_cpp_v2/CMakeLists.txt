@@ -44,7 +44,7 @@ qt_add_qml_module(ai_frontier_qt_dashboard
         src/qml/components/DataSplitBar.qml
         src/qml/components/ResourceBar.qml
         src/qml/components/StatusIndicator.qml
-        src/qml/components/PillBadge.qml
+        src/qml/components/FlatTag.qml
         src/qml/components/IconBadge.qml
         src/qml/components/SidebarNav.qml
         src/qml/components/NavButton.qml

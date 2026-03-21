@@ -479,7 +479,7 @@ ScrollView {
                                                 width: parent.width
                                                 Text { text: "0" + (index + 1); color: AppTheme.textMuted; font.pixelSize: 11; font.weight: Font.Bold }
                                                 Item { width: parent.width - stageChip.width - 20; height: 1 }
-                                                PillBadge { id: stageChip; text: cardState; badgeColor: accentColor }
+                                                FlatTag { id: stageChip; text: cardState; tagColor: accentColor }
                                             }
 
                                             Text { text: modelData.title; color: AppTheme.textPrimary; font.pixelSize: 17; font.weight: Font.Bold }

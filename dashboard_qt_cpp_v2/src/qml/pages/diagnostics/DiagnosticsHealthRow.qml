@@ -41,10 +41,10 @@ Rectangle {
             anchors.verticalCenter: parent.verticalCenter
         }
 
-        PillBadge {
+        FlatTag {
             id: statusBadge
             text: root.status || "info"
-            badgeColor: root.stateColor
+            tagColor: root.stateColor
             anchors.verticalCenter: parent.verticalCenter
         }
     }

@@ -13,13 +13,13 @@ GlassPanel {
 
     default property alias contentData: contentSlot.data
 
-    radius: 18
+    radius: 12
     layer.enabled: true
     layer.effect: MultiEffect {
         shadowEnabled: true
         shadowColor: Qt.rgba(0, 0, 0, 0.55)
-        shadowBlur: 0.74
-        shadowVerticalOffset: 12
+        shadowBlur: 0.42
+        shadowVerticalOffset: 8
         shadowHorizontalOffset: 0
     }
 
@@ -29,7 +29,7 @@ GlassPanel {
     Rectangle {
         anchors.left: parent.left
         anchors.top: parent.top
-        width: parent.width * 0.44
+        width: parent.width * 0.36
         height: 2
         radius: 1
         color: AppTheme.alpha(root.badgeColor, root.title.length ? 0.52 : 0.22)
@@ -41,14 +41,14 @@ GlassPanel {
         anchors.top: parent.top
         anchors.left: parent.left
         anchors.right: parent.right
-        height: root.title.length > 0 ? 62 : 0
+        height: root.title.length > 0 ? 56 : 0
         visible: root.title.length > 0
 
         RowLayout {
             anchors.fill: parent
-            anchors.leftMargin: 22
-            anchors.rightMargin: 22
-            spacing: 10
+            anchors.leftMargin: 18
+            anchors.rightMargin: 18
+            spacing: 8
 
             Rectangle {
                 Layout.alignment: Qt.AlignVCenter
@@ -65,7 +65,7 @@ GlassPanel {
                 color: AppTheme.textSecondary
                 font.pixelSize: 10
                 font.weight: 800
-                font.letterSpacing: 1.8
+                font.letterSpacing: 1.6
             }
 
             Item { Layout.fillWidth: true }
@@ -73,11 +73,11 @@ GlassPanel {
             Rectangle {
                 visible: root.badge.length > 0
                 Layout.alignment: Qt.AlignVCenter
-                radius: 11
-                implicitWidth: badgeLabel.implicitWidth + 20
-                height: 22
-                color: Qt.rgba(root.badgeColor.r, root.badgeColor.g, root.badgeColor.b, 0.13)
-                border.color: Qt.rgba(root.badgeColor.r, root.badgeColor.g, root.badgeColor.b, 0.26)
+                radius: 0
+                implicitWidth: badgeLabel.implicitWidth + 16
+                height: 20
+                color: Qt.rgba(root.badgeColor.r, root.badgeColor.g, root.badgeColor.b, 0.08)
+                border.color: Qt.rgba(root.badgeColor.r, root.badgeColor.g, root.badgeColor.b, 0.18)
                 border.width: 1
 
                 Text {
@@ -85,9 +85,9 @@ GlassPanel {
                     anchors.centerIn: parent
                     text: root.badge
                     color: root.badgeColor
-                    font.pixelSize: 10
+                    font.pixelSize: 9
                     font.weight: 700
-                    font.letterSpacing: 0.3
+                    font.letterSpacing: 0.5
                 }
             }
         }
@@ -96,8 +96,8 @@ GlassPanel {
             anchors.left: parent.left
             anchors.right: parent.right
             anchors.bottom: parent.bottom
-            anchors.leftMargin: 22
-            anchors.rightMargin: 22
+            anchors.leftMargin: 18
+            anchors.rightMargin: 18
             height: 1
             color: Qt.rgba(1, 1, 1, 0.055)
         }
@@ -111,7 +111,7 @@ GlassPanel {
         anchors.bottom: parent.bottom
         anchors.leftMargin: root.contentPadding
         anchors.rightMargin: root.contentPadding
-        anchors.topMargin: root.title.length > 0 ? root.contentPadding - 4 : root.contentPadding
+        anchors.topMargin: root.title.length > 0 ? root.contentPadding - 8 : root.contentPadding
         anchors.bottomMargin: root.contentPadding
     }
 }
