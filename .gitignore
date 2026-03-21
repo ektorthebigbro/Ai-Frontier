@@ -47,9 +47,9 @@ Desktop.ini
 ._*
 
 # CMake build directories
-dashboard/build*/
-dashboard_qt_cpp/build*/
-dashboard_qt_cpp_v2/build*/
+backend/build*/
+dashboard_widgets/build*/
+dashboard_qml/build*/
 
 # Compiled binaries
 *.exe

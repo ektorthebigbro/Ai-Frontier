@@ -490,9 +490,9 @@ def run_native_binary(binary_path: Path, temp_subdir: str) -> int:
 
 def handle_build(args: argparse.Namespace) -> int:
     target_map = {
-        "backend": (PROJECT_ROOT / "dashboard", "ai_frontier_backend_api"),
-        "widgets": (PROJECT_ROOT / "dashboard_qt_cpp", "ai_frontier_qt_dashboard"),
-        "qml": (PROJECT_ROOT / "dashboard_qt_cpp_v2", "ai_frontier_qt_dashboard"),
+        "backend": (PROJECT_ROOT / "backend", "ai_frontier_backend_api"),
+        "widgets": (PROJECT_ROOT / "dashboard_widgets", "ai_frontier_qt_dashboard"),
+        "qml": (PROJECT_ROOT / "dashboard_qml", "ai_frontier_qt_dashboard"),
     }
     project_dir, target = target_map[args.target]
     build_target(project_dir, target)
@@ -501,8 +501,8 @@ def handle_build(args: argparse.Namespace) -> int:
 
 def handle_run(args: argparse.Namespace) -> int:
     target_map = {
-        "widgets": (PROJECT_ROOT / "dashboard_qt_cpp", "ai_frontier_qt_dashboard", "dashboard_widgets"),
-        "qml": (PROJECT_ROOT / "dashboard_qt_cpp_v2", "ai_frontier_qt_dashboard", "dashboard_qml"),
+        "widgets": (PROJECT_ROOT / "dashboard_widgets", "ai_frontier_qt_dashboard", "dashboard_widgets"),
+        "qml": (PROJECT_ROOT / "dashboard_qml", "ai_frontier_qt_dashboard", "dashboard_qml"),
     }
     project_dir, target, temp_subdir = target_map[args.target]
     binary = existing_built_binary(project_dir / "build", target)
@@ -512,9 +512,9 @@ def handle_run(args: argparse.Namespace) -> int:
 
 
 def handle_server(args: argparse.Namespace) -> int:
-    binary = existing_built_binary(PROJECT_ROOT / "dashboard" / "build", "ai_frontier_backend_api")
+    binary = existing_built_binary(PROJECT_ROOT / "backend" / "build", "ai_frontier_backend_api")
     if binary is None or not args.skip_build:
-        binary = build_target(PROJECT_ROOT / "dashboard", "ai_frontier_backend_api")
+        binary = build_target(PROJECT_ROOT / "backend", "ai_frontier_backend_api")
     print(f"Starting native backend console on http://127.0.0.1:{backend_port()}")
     return run_native_binary(binary, "server")
 

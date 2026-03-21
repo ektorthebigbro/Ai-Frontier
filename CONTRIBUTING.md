@@ -81,10 +81,12 @@ frontier/          # Core Python library (config, hardware, data, modeling)
 training/          # Training loop and checkpointing
 evaluation/        # Benchmark evaluation
 inference/         # FastAPI inference server
-dataset_pipeline/  # Dataset preparation
-dashboard/         # C++ native backend (HTTP API server)
-dashboard_qt_cpp/  # Qt Widgets desktop dashboard (legacy)
-dashboard_qt_cpp_v2/ # Qt Quick/QML desktop dashboard (active)
+dataset/           # Dataset preparation
+critic/            # Critic model for RL training
+rl/                # RL training loop
+backend/           # C++ native backend (HTTP API server)
+dashboard_widgets/ # Qt Widgets desktop dashboard (legacy)
+dashboard_qml/     # Qt Quick/QML desktop dashboard (active)
 scripts/           # Cross-platform launcher
 configs/           # Runtime configuration (YAML)
 tests/             # Python tests

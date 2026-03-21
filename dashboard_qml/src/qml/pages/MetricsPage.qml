@@ -119,7 +119,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1360 ? 4 : 1
-                    implicitHeight: liveComputeColumn.implicitHeight + 38
+                    implicitHeight: liveComputeColumn.implicitHeight + frameHeight
                     title: "LIVE COMPUTE"
                     badge: AppController.connected ? "backend stream" : "awaiting link"
                     badgeColor: AppController.connected ? AppTheme.accentPrimary : AppTheme.danger
@@ -142,7 +142,7 @@ ScrollView {
 
                         GridLayout {
                             Layout.fillWidth: true
-                            columns: width > 760 ? 3 : 2
+                            columns: width > 900 ? 3 : (width > 620 ? 2 : 1)
                             columnSpacing: 10
                             rowSpacing: 10
 
@@ -189,7 +189,7 @@ ScrollView {
                                 Rectangle {
                                     required property var modelData
                                     Layout.fillWidth: true
-                                    Layout.preferredHeight: 84
+                                    Layout.preferredHeight: Math.max(92, tileColumn.implicitHeight + 24)
                                     radius: 8
                                     color: Qt.rgba(modelData.accent.r, modelData.accent.g, modelData.accent.b, 0.07)
                                     border.color: Qt.rgba(modelData.accent.r, modelData.accent.g, modelData.accent.b, 0.16)
@@ -205,6 +205,7 @@ ScrollView {
                                     }
 
                                     Column {
+                                        id: tileColumn
                                         anchors.fill: parent
                                         anchors.margins: 12
                                         spacing: 4
@@ -241,7 +242,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1360 ? 2 : 1
-                    implicitHeight: contextColumn.implicitHeight + 38
+                    implicitHeight: contextColumn.implicitHeight + frameHeight
                     title: "RUN CONTEXT"
                     badge: evaluateMessage.length ? "eval attached" : "training only"
                     badgeColor: evaluateMessage.length ? AppTheme.chartC : AppTheme.textMuted
@@ -266,7 +267,7 @@ ScrollView {
                             Rectangle {
                                 required property var modelData
                                 width: parent.width
-                                height: 40
+                                height: 42
                                 radius: 8
                                 color: Qt.rgba(1, 1, 1, 0.024)
                                 border.color: Qt.rgba(1, 1, 1, 0.07)
@@ -299,6 +300,9 @@ ScrollView {
                                         color: AppTheme.textPrimary
                                         font.pixelSize: 12
                                         font.weight: Font.DemiBold
+                                        width: Math.min(140, parent.width * 0.44)
+                                        elide: Text.ElideRight
+                                        horizontalAlignment: Text.AlignRight
                                         anchors.verticalCenter: parent.verticalCenter
                                     }
                                 }
@@ -310,7 +314,7 @@ ScrollView {
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: width > 1220 ? 4 : 2
+                columns: width > 1220 ? 4 : (width > 680 ? 2 : 1)
                 columnSpacing: 12
                 rowSpacing: 12
 
@@ -336,7 +340,7 @@ ScrollView {
 
             GridLayout {
                 Layout.fillWidth: true
-                columns: width > 1220 ? 4 : 2
+                columns: width > 1220 ? 4 : (width > 680 ? 2 : 1)
                 columnSpacing: 12
                 rowSpacing: 12
 
@@ -450,7 +454,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1280 ? 2 : 1
-                    Layout.preferredHeight: 326
+                    Layout.preferredHeight: 340
                     title: "LOSS OVER TIME"
 
                     TrendChartWidget {
@@ -467,7 +471,7 @@ ScrollView {
 
                 GlowCard {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 326
+                    Layout.preferredHeight: 340
                     title: "BEST WINDOWS"
 
                     Column {
@@ -534,7 +538,7 @@ ScrollView {
 
                 GlowCard {
                     Layout.fillWidth: true
-                    Layout.preferredHeight: 296
+                    Layout.preferredHeight: 308
                     title: "ACCURACY OVER TIME"
 
                     TrendChartWidget {
@@ -552,7 +556,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1280 ? 2 : 1
-                    Layout.preferredHeight: 296
+                    Layout.preferredHeight: 308
                     title: "SECONDARY SIGNALS"
 
                     TrendChartWidget {

@@ -21,7 +21,7 @@ GlowCard {
         : (root.paused ? AppTheme.warning : (root.running ? AppTheme.success : AppTheme.accentPrimary))
 
     Layout.fillWidth: true
-    implicitHeight: jobContent.implicitHeight + 42
+    implicitHeight: jobContent.implicitHeight + frameHeight
     title: root.titleText
     badge: root.stageText
     badgeColor: root.stateColor

@@ -88,7 +88,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1280 ? 3 : 1
-                    implicitHeight: briefColumn.implicitHeight + 44
+                    implicitHeight: briefColumn.implicitHeight + frameHeight
                     title: "EVALUATION BRIEF"
                     badge: evalStage()
                     badgeColor: evalStage() === "completed" ? AppTheme.success : (evalStage() === "running" ? AppTheme.accentPrimary : AppTheme.textMuted)
@@ -158,7 +158,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1280 ? 2 : 1
-                    implicitHeight: actionsColumn.implicitHeight + 44
+                    implicitHeight: actionsColumn.implicitHeight + frameHeight
                     title: "REPORT ACTIONS"
 
                     Column {

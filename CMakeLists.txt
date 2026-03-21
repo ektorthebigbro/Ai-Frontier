@@ -9,13 +9,13 @@ option(BUILD_DASHBOARD_WIDGETS "Build the Qt Widgets dashboard (legacy)" OFF)
 option(BUILD_DASHBOARD_QML "Build the Qt Quick/QML dashboard" OFF)
 
 if(BUILD_BACKEND)
-    add_subdirectory(dashboard)
+    add_subdirectory(backend)
 endif()
 
 if(BUILD_DASHBOARD_WIDGETS)
-    add_subdirectory(dashboard_qt_cpp)
+    add_subdirectory(dashboard_widgets)
 endif()
 
 if(BUILD_DASHBOARD_QML)
-    add_subdirectory(dashboard_qt_cpp_v2)
+    add_subdirectory(dashboard_qml)
 endif()

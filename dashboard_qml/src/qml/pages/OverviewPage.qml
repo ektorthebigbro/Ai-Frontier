@@ -152,7 +152,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1320 ? 3 : 1
-                    implicitHeight: missionColumn.implicitHeight + 42
+                    implicitHeight: missionColumn.implicitHeight + frameHeight
                     title: "CURRENT MISSION"
                     badge: primaryStage
                     badgeColor: stageColor(primaryStage)
@@ -243,7 +243,7 @@ ScrollView {
 
                     GlowCard {
                         Layout.fillWidth: true
-                        implicitHeight: quickColumn.implicitHeight + 42
+                        implicitHeight: quickColumn.implicitHeight + frameHeight
                         title: "OPERATOR SNAPSHOT"
 
                         Column {
@@ -272,7 +272,7 @@ ScrollView {
 
                     GlowCard {
                         Layout.fillWidth: true
-                        implicitHeight: pulseColumn.implicitHeight + 42
+                        implicitHeight: pulseColumn.implicitHeight + frameHeight
                         title: "SYSTEM PULSE"
 
                         Column {
@@ -429,7 +429,7 @@ ScrollView {
 
                     GlowCard {
                         Layout.fillWidth: true
-                        implicitHeight: timelineColumn.implicitHeight + 42
+                        implicitHeight: timelineColumn.implicitHeight + frameHeight
                         title: "AUTOPILOT COMMAND DECK"
 
                         ColumnLayout {
@@ -498,7 +498,7 @@ ScrollView {
                     GlowCard {
                         visible: page.advancedMode
                         Layout.fillWidth: true
-                        implicitHeight: judgeColumn.implicitHeight + 42
+                        implicitHeight: judgeColumn.implicitHeight + frameHeight
                         title: "ADVANCED CONTROLS"
 
                         Column {
@@ -525,7 +525,7 @@ ScrollView {
 
                     GlowCard {
                         Layout.fillWidth: true
-                        implicitHeight: alertsColumn.implicitHeight + 42
+                        implicitHeight: alertsColumn.implicitHeight + frameHeight
                         title: "ALERTS"
 
                         Column {
@@ -551,7 +551,7 @@ ScrollView {
 
                     GlowCard {
                         Layout.fillWidth: true
-                        implicitHeight: processColumn.implicitHeight + 42
+                        implicitHeight: processColumn.implicitHeight + frameHeight
                         title: "PROCESS SNAPSHOT"
 
                         Column {

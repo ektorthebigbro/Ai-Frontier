@@ -10,6 +10,9 @@ GlassPanel {
     property string badge: ""
     property color badgeColor: AppTheme.accentPrimary
     property int contentPadding: 22
+    readonly property int contentTopInset: root.title.length > 0 ? root.contentPadding - 8 : root.contentPadding
+    readonly property int contentBottomInset: root.contentPadding
+    readonly property int frameHeight: cardHeader.height + contentTopInset + contentBottomInset
 
     default property alias contentData: contentSlot.data
 
@@ -111,7 +114,7 @@ GlassPanel {
         anchors.bottom: parent.bottom
         anchors.leftMargin: root.contentPadding
         anchors.rightMargin: root.contentPadding
-        anchors.topMargin: root.title.length > 0 ? root.contentPadding - 8 : root.contentPadding
-        anchors.bottomMargin: root.contentPadding
+        anchors.topMargin: root.contentTopInset
+        anchors.bottomMargin: root.contentBottomInset
     }
 }

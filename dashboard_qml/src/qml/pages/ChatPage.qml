@@ -107,7 +107,7 @@ Item {
             GlowCard {
                 Layout.fillWidth: true
                 Layout.columnSpan: page.width > 1320 ? 3 : 1
-                implicitHeight: statusColumn.implicitHeight + 42
+                implicitHeight: statusColumn.implicitHeight + frameHeight
                 title: "CHAT MISSION"
                 badge: checkpoint["available"] ? "checkpoint ready" : "no checkpoint"
                 badgeColor: checkpoint["available"] ? AppTheme.success : AppTheme.warning
@@ -179,7 +179,7 @@ Item {
             GlowCard {
                 Layout.fillWidth: true
                 Layout.columnSpan: page.width > 1320 ? 2 : 1
-                implicitHeight: presetColumn.implicitHeight + 42
+                implicitHeight: presetColumn.implicitHeight + frameHeight
                 title: "PROMPT STARTERS"
 
                 Column {

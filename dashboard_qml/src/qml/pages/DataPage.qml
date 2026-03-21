@@ -85,7 +85,7 @@ ScrollView {
             GlowCard {
                 Layout.fillWidth: true
                 title: "DATASETS"
-                implicitHeight: datasetColumn.implicitHeight + 40
+                implicitHeight: datasetColumn.implicitHeight + frameHeight
 
                 ColumnLayout {
                     id: datasetColumn
@@ -168,7 +168,7 @@ ScrollView {
             GlowCard {
                 Layout.fillWidth: true
                 title: "CACHED MODELS"
-                implicitHeight: cacheColumn.implicitHeight + 40
+                implicitHeight: cacheColumn.implicitHeight + frameHeight
 
                 ColumnLayout {
                     id: cacheColumn
@@ -273,7 +273,7 @@ ScrollView {
             GlowCard {
                 Layout.fillWidth: true
                 title: "ARTIFACT LINEAGE"
-                implicitHeight: artifactColumn.implicitHeight + 40
+                implicitHeight: artifactColumn.implicitHeight + frameHeight
 
                 ColumnLayout {
                     id: artifactColumn
@@ -320,7 +320,7 @@ ScrollView {
             GlowCard {
                 Layout.fillWidth: true
                 title: "ACTION TRAIL"
-                implicitHeight: trailColumn.implicitHeight + 40
+                implicitHeight: trailColumn.implicitHeight + frameHeight
 
                 ColumnLayout {
                     id: trailColumn

@@ -197,7 +197,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1280 ? 3 : 1
-                    implicitHeight: missionColumn.implicitHeight + 42
+                    implicitHeight: missionColumn.implicitHeight + frameHeight
                     title: "MISSION CONTROL"
                     badge: missionStatusText()
                     badgeColor: missionStatusText() === "failed" ? AppTheme.danger : (missionStatusText() === "resumable" ? AppTheme.warning : AppTheme.accentPrimary)
@@ -274,7 +274,7 @@ ScrollView {
                 GlowCard {
                     Layout.fillWidth: true
                     Layout.columnSpan: content.width > 1280 ? 2 : 1
-                    implicitHeight: alertColumn.implicitHeight + 42
+                    implicitHeight: alertColumn.implicitHeight + frameHeight
                     title: "RECENT OPERATIONS"
 
                     Column {

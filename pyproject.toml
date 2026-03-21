@@ -45,7 +45,7 @@ dev = [
 ai-frontier = "scripts.launcher:main"
 
 [tool.setuptools.packages.find]
-include = ["frontier*", "training*", "evaluation*", "inference*", "dashboard*", "dataset_pipeline*"]
+include = ["frontier*", "training*", "evaluation*", "inference*", "dataset*", "critic*", "rl*", "scripts*"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

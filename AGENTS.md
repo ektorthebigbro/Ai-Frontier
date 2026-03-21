@@ -1,7 +1,7 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-`frontier/` contains shared Python core logic for config, hardware, data, modeling, optimization, and model management. Main workflows live in `training/`, `dataset_pipeline/`, `evaluation/`, and `inference/`. The C++ native backend is in `dashboard/` with its own `CMakeLists.txt`. Desktop clients are in `dashboard_qt_cpp/` (legacy Qt Widgets) and `dashboard_qt_cpp_v2/` (active Qt Quick/QML). Runtime config lives in `configs/default.yaml`. Generated outputs belong in `artifacts/`, `checkpoints/`, `logs/`, and `data/cache` or `data/processed`; keep large generated files out of Git.
+`frontier/` contains shared Python core logic for config, hardware, data, modeling, optimization, and model management. Main workflows live in `training/`, `dataset/`, `evaluation/`, `inference/`, `critic/`, and `rl/`. The C++ native backend is in `backend/` with its own `CMakeLists.txt`. Desktop clients are in `dashboard_widgets/` (legacy Qt Widgets) and `dashboard_qml/` (active Qt Quick/QML). Runtime config lives in `configs/default.yaml`. Generated outputs belong in `artifacts/`, `checkpoints/`, `logs/`, and `data/cache` or `data/processed`; keep large generated files out of Git.
 
 ## Build, Test, and Development Commands
 - `python scripts/launcher.py setup` - creates `.venv`, installs dependencies, auto-detects GPU vendor (NVIDIA/AMD/CPU), and installs the correct PyTorch wheels.
@@ -15,7 +15,7 @@
 All operations go through `scripts/launcher.py` (cross-platform). There are no platform-specific `.bat` or `.sh` scripts.
 
 ## Architecture
-The C++ backend (`dashboard/`) is the central orchestrator. It manages Python workers via QProcess, exposes a REST API on the port configured in `configs/default.yaml` (default 8765), and handles metrics, diagnostics, and state. Dashboards connect to it via HTTP. The `scripts/launcher.py action` command also communicates via HTTP.
+The C++ backend (`backend/`) is the central orchestrator. It manages Python workers via QProcess, exposes a REST API on the port configured in `configs/default.yaml` (default 8765), and handles metrics, diagnostics, and state. Dashboards connect to it via HTTP. The `scripts/launcher.py action` command also communicates via HTTP.
 
 ## Coding Style & Naming Conventions
 - **Python**: 4-space indent, `snake_case` functions, `PascalCase` classes, `pathlib.Path` for paths, type hints on signatures.

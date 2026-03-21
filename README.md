@@ -18,10 +18,10 @@ frontier/            Core Python library (config, hardware, data, modeling, opti
 training/            Training loop and checkpointing
 evaluation/          Benchmark evaluation and report generation
 inference/           FastAPI inference server
-dataset_pipeline/    Dataset preparation and tokenizer workflow
-dashboard/           C++ native backend (HTTP API server)
-dashboard_qt_cpp/    Qt Widgets desktop dashboard (legacy)
-dashboard_qt_cpp_v2/ Qt Quick/QML desktop dashboard (active)
+dataset/             Dataset preparation and tokenizer workflow
+backend/             C++ native backend (HTTP API server)
+dashboard_widgets/   Qt Widgets desktop dashboard (legacy)
+dashboard_qml/       Qt Quick/QML desktop dashboard (active)
 scripts/             Cross-platform launcher
 configs/             Runtime configuration (YAML)
 tests/               Python tests
@@ -105,14 +105,14 @@ Runtime config lives in `configs/default.yaml`. Key settings:
                     +-------+-------+
                     |               |
               C++ Backend      Python Workers
-           (dashboard/)     (training, eval, etc.)
+           (backend/)       (training, eval, etc.)
                 |                   |
           HTTP API :8765      QProcess management
                 |
         +-------+-------+
         |               |
    QML Dashboard    CLI actions
-  (dashboard_qt_cpp_v2)  (launcher.py action)
+  (dashboard_qml)    (launcher.py action)
 ```
 
 The C++ backend is the central orchestrator. It manages Python workers as subprocesses, tracks metrics, handles diagnostics, and exposes a REST API. Dashboards and CLI commands communicate with it via HTTP.
