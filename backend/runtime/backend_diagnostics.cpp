@@ -473,10 +473,22 @@ QJsonArray ControlCenterBackend::runHealthChecks() {
                                                   : QStringLiteral("%1 is missing").arg(info.fileName())));
     }
 
-    const QString python = pythonPath();
-    health.append(makeHealthRow(QStringLiteral("python"),
-                                QFileInfo::exists(python) || python == QStringLiteral("python") ? QStringLiteral("ok") : QStringLiteral("warning"),
-                                QStringLiteral("Worker runtime: %1").arg(python)));
+    const QString launcher = launcherScriptPath();
+    health.append(makeHealthRow(QStringLiteral("launcher"),
+                                QFileInfo::exists(launcher) ? QStringLiteral("ok") : QStringLiteral("warning"),
+                                QStringLiteral("Launcher entry point: %1").arg(launcher)));
+    const QString nativeWorker = nativeWorkerPath();
+    health.append(makeHealthRow(QStringLiteral("native_worker"),
+                                QFileInfo::exists(nativeWorker) ? QStringLiteral("ok") : QStringLiteral("warning"),
+                                nativeWorker.isEmpty()
+                                    ? QStringLiteral("Native worker host has not been built yet")
+                                    : QStringLiteral("Native worker host: %1").arg(nativeWorker)));
+    const QString nativeModule = nativeWorkerModulePath();
+    health.append(makeHealthRow(QStringLiteral("native_module"),
+                                QFileInfo::exists(nativeModule) ? QStringLiteral("ok") : QStringLiteral("warning"),
+                                nativeModule.isEmpty()
+                                    ? QStringLiteral("Hot-reloadable native runtime module has not been built yet")
+                                    : QStringLiteral("Hot-reloadable module: %1").arg(nativeModule)));
 
     const int invalidRows = countInvalidFeedRows(m_feedPath, 64);
     health.append(makeHealthRow(QStringLiteral("feed"),
@@ -496,37 +508,48 @@ QJsonObject ControlCenterBackend::reloadModuleAction(const QString& moduleName) 
     }
 
     QString resultMessage;
-    if (moduleName == QStringLiteral("frontier.hardware")) {
+    if (moduleName == QStringLiteral("native.hardware")) {
         m_hardwareCacheUntil = QDateTime();
         buildHardwareSnapshot();
-        clearIssue(QStringLiteral("frontier.hardware::GPU telemetry unavailable"));
+        clearIssue(QStringLiteral("native.hardware::GPU telemetry unavailable"));
         resultMessage = QStringLiteral("Hardware probes refreshed without restarting the backend.");
-    } else if (moduleName == QStringLiteral("frontier.config")) {
+    } else if (moduleName == QStringLiteral("native.config")) {
         loadConfigFromDisk(true);
         invalidateRuntimeCaches();
         resultMessage = QStringLiteral("Config reloaded from disk.");
-    } else if (moduleName == QStringLiteral("frontier.model_management")) {
-        m_modelCacheUntil = QDateTime();
-        buildModelCacheSummary();
-        resultMessage = QStringLiteral("Model catalog and cache summary refreshed.");
-    } else if (moduleName == QStringLiteral("frontier.modeling") || moduleName == QStringLiteral("frontier.judging")) {
+    } else if (moduleName == QStringLiteral("native.runtime.module")) {
+        invalidateRuntimeCaches();
+        resultMessage = QStringLiteral("Native runtime caches cleared. Restart a worker to hot-reload the rebuilt module.");
+    } else if (moduleName == QStringLiteral("native.inference.module")) {
         if (m_processes.value(QStringLiteral("inference")).process) {
             restartManagedProcess(QStringLiteral("inference"));
-            resultMessage = QStringLiteral("Inference server restarted to pick up updated model code.");
+            resultMessage = QStringLiteral("Inference server restarted to hot-reload the native C++20 module.");
         } else {
-            resultMessage = QStringLiteral("Model changes will apply on the next inference or evaluation run.");
+            resultMessage = QStringLiteral("Inference module changes will apply on the next inference launch.");
         }
-    } else if (moduleName == QStringLiteral("frontier.data")
-               || moduleName == QStringLiteral("dataset_pipeline.build_dataset")) {
+    } else if (moduleName == QStringLiteral("native.prepare.module")) {
         if (m_processes.value(QStringLiteral("prepare")).process) {
             restartManagedProcess(QStringLiteral("prepare"));
-            resultMessage = QStringLiteral("Dataset preparation restarted with the updated prepare pipeline.");
+            resultMessage = QStringLiteral("Prepare worker restarted to hot-reload the native C++20 module.");
         } else {
-            resultMessage = QStringLiteral("Prepare pipeline changes will apply on the next prepare run.");
+            resultMessage = QStringLiteral("Prepare module changes will apply on the next prepare run.");
+        }
+    } else if (moduleName == QStringLiteral("native.training.module")) {
+        if (m_processes.value(QStringLiteral("training")).process) {
+            restartManagedProcess(QStringLiteral("training"));
+            resultMessage = QStringLiteral("Training worker restarted to hot-reload the native C++20 module.");
+        } else {
+            resultMessage = QStringLiteral("Training module changes will apply on the next training run.");
+        }
+    } else if (moduleName == QStringLiteral("native.evaluation.module")) {
+        if (m_processes.value(QStringLiteral("evaluate")).process) {
+            restartManagedProcess(QStringLiteral("evaluate"));
+            resultMessage = QStringLiteral("Evaluation worker restarted to hot-reload the native C++20 module.");
+        } else {
+            resultMessage = QStringLiteral("Evaluation module changes will apply on the next evaluation run.");
         }
     } else {
-        invalidateRuntimeCaches();
-        resultMessage = QStringLiteral("Runtime caches cleared. The next worker launch will use the updated module code.");
+        resultMessage = QStringLiteral("The next native worker launch will load the rebuilt C++20 module.");
     }
 
     appendFixRow(m_fixHistory, QStringLiteral("hot_reload"), moduleName, resultMessage);
@@ -676,7 +699,9 @@ QJsonObject ControlCenterBackend::buildIssueDeepDivePayload(const QString& key) 
     }
 
     const QJsonObject environment{
-        {QStringLiteral("python"), pythonPath()},
+        {QStringLiteral("launcher_script"), launcherScriptPath()},
+        {QStringLiteral("native_worker"), nativeWorkerPath()},
+        {QStringLiteral("native_module"), nativeWorkerModulePath()},
         {QStringLiteral("cache_dir"), QDir(m_rootPath).absoluteFilePath(
              m_config.value(QStringLiteral("large_judge")).toObject()
                  .value(QStringLiteral("cache_dir")).toString(QStringLiteral("data/cache/large_judge")))},

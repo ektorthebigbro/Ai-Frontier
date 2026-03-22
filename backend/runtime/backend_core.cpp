@@ -66,14 +66,13 @@ ControlCenterBackend::ControlCenterBackend(QObject* parent)
     restoreAutopilotRuntimeState();
 
     m_reloadableModules = {
-        QStringLiteral("frontier.hardware"),
-        QStringLiteral("frontier.config"),
-        QStringLiteral("frontier.utils"),
-        QStringLiteral("frontier.model_management"),
-        QStringLiteral("frontier.modeling"),
-        QStringLiteral("frontier.data"),
-        QStringLiteral("dataset_pipeline.build_dataset"),
-        QStringLiteral("frontier.judging"),
+        QStringLiteral("native.hardware"),
+        QStringLiteral("native.config"),
+        QStringLiteral("native.runtime.module"),
+        QStringLiteral("native.prepare.module"),
+        QStringLiteral("native.training.module"),
+        QStringLiteral("native.evaluation.module"),
+        QStringLiteral("native.inference.module"),
     };
 
     registerRoutes();
@@ -146,15 +145,55 @@ void ControlCenterBackend::initializePaths() {
 
 void ControlCenterBackend::initializeProcessCatalog() {
     const QString root = m_rootPath;
+    const QString nativeWorker = nativeWorkerPath().isEmpty()
+        ? QDir(QCoreApplication::applicationDirPath()).absoluteFilePath(QStringLiteral("ai_frontier_native_worker"))
+        : nativeWorkerPath();
+    const QString nativeModule = nativeWorkerModulePath();
     m_processes.insert(QStringLiteral("setup"),
                        {QStringLiteral("setup"),
                         QStringLiteral("Environment Setup"),
                         m_setupScript,
                         {QStringLiteral("setup")}});
-    m_processes.insert(QStringLiteral("prepare"), {QStringLiteral("prepare"), QStringLiteral("Data Preparation"), QDir(root).absoluteFilePath(QStringLiteral("dataset_pipeline/build_dataset.py")), {QStringLiteral("--config"), m_configPath}});
-    m_processes.insert(QStringLiteral("training"), {QStringLiteral("training"), QStringLiteral("Model Training"), QDir(root).absoluteFilePath(QStringLiteral("training/train_system.py")), {QStringLiteral("--config"), m_configPath}});
-    m_processes.insert(QStringLiteral("evaluate"), {QStringLiteral("evaluate"), QStringLiteral("Evaluation"), QDir(root).absoluteFilePath(QStringLiteral("evaluation/evaluate.py")), {QStringLiteral("--config"), m_configPath}});
-    m_processes.insert(QStringLiteral("inference"), {QStringLiteral("inference"), QStringLiteral("Inference Server"), QDir(root).absoluteFilePath(QStringLiteral("inference/server.py")), {QStringLiteral("--config"), m_configPath}});
+    m_processes.insert(QStringLiteral("prepare"),
+                       {QStringLiteral("prepare"),
+                        QStringLiteral("Data Preparation"),
+                        nativeWorker,
+                        {QStringLiteral("--job"),
+                         QStringLiteral("prepare"),
+                         QStringLiteral("--config"),
+                         m_configPath,
+                         QStringLiteral("--module"),
+                         nativeModule}});
+    m_processes.insert(QStringLiteral("training"),
+                       {QStringLiteral("training"),
+                        QStringLiteral("Model Training"),
+                        nativeWorker,
+                        {QStringLiteral("--job"),
+                         QStringLiteral("training"),
+                         QStringLiteral("--config"),
+                         m_configPath,
+                         QStringLiteral("--module"),
+                         nativeModule}});
+    m_processes.insert(QStringLiteral("evaluate"),
+                       {QStringLiteral("evaluate"),
+                        QStringLiteral("Evaluation"),
+                        nativeWorker,
+                        {QStringLiteral("--job"),
+                         QStringLiteral("evaluate"),
+                         QStringLiteral("--config"),
+                         m_configPath,
+                         QStringLiteral("--module"),
+                         nativeModule}});
+    m_processes.insert(QStringLiteral("inference"),
+                       {QStringLiteral("inference"),
+                        QStringLiteral("Inference Server"),
+                        nativeWorker,
+                        {QStringLiteral("--job"),
+                         QStringLiteral("inference"),
+                         QStringLiteral("--config"),
+                         m_configPath,
+                         QStringLiteral("--module"),
+                         nativeModule}});
     m_processes.insert(QStringLiteral("autopilot"), {QStringLiteral("autopilot"), QStringLiteral("Autopilot"), QString(), {}});
 }
 

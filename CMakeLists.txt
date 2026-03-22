@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.21)
 project(ai_frontier VERSION 3.0.0 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
 option(BUILD_BACKEND "Build the native backend API server" ON)
 option(BUILD_DASHBOARD_WIDGETS "Build the Qt Widgets dashboard (legacy)" OFF)

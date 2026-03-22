@@ -417,6 +417,60 @@ inline QString launcherScriptPath() {
     return rootPathFor(QStringLiteral("scripts/launcher.py"));
 }
 
+inline QStringList adjacentArtifactCandidates(const QString& baseName, bool executable) {
+    QStringList fileNames;
+#ifdef Q_OS_WIN
+    fileNames.append(baseName + (executable ? QStringLiteral(".exe") : QStringLiteral(".dll")));
+#elif defined(Q_OS_MACOS)
+    fileNames.append(executable
+        ? baseName
+        : QStringLiteral("lib%1.dylib").arg(baseName));
+#else
+    fileNames.append(executable
+        ? baseName
+        : QStringLiteral("lib%1.so").arg(baseName));
+#endif
+
+    QStringList candidates;
+    const QDir appDir(QCoreApplication::applicationDirPath());
+    const QStringList relativeDirs = {
+        QStringLiteral("."),
+        QStringLiteral("plugins"),
+        QStringLiteral(".."),
+        QStringLiteral("../plugins"),
+    };
+    for (const QString& relativeDir : relativeDirs) {
+        const QDir dir(appDir.absoluteFilePath(relativeDir));
+        for (const QString& fileName : fileNames) {
+            candidates.append(dir.absoluteFilePath(fileName));
+        }
+    }
+
+    const QDir backendBuildDir(rootPathFor(QStringLiteral("backend/build")));
+    const QStringList buildVariants = {
+        QStringLiteral("."),
+        QStringLiteral("Release"),
+        QStringLiteral("Debug"),
+        QStringLiteral("RelWithDebInfo"),
+        QStringLiteral("MinSizeRel"),
+    };
+    for (const QString& variant : buildVariants) {
+        const QDir dir(backendBuildDir.absoluteFilePath(variant));
+        for (const QString& fileName : fileNames) {
+            candidates.append(dir.absoluteFilePath(fileName));
+        }
+    }
+    return candidates;
+}
+
+inline QString nativeWorkerPath() {
+    return firstExistingPath(adjacentArtifactCandidates(QStringLiteral("ai_frontier_native_worker"), true));
+}
+
+inline QString nativeWorkerModulePath() {
+    return firstExistingPath(adjacentArtifactCandidates(QStringLiteral("ai_frontier_runtime_module"), false));
+}
+
 inline QString sanitizeModelDir(const QString& modelId) {
     QString name = modelId;
     name.replace(QStringLiteral("/"), QStringLiteral("--"));
